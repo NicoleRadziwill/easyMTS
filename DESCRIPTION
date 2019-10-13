@@ -1,0 +1,27 @@
+Package: easyMTS
+Title: Create and validate diagnostics with Mahalanobis-Taguchi System (MTS)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Nicole",
+           family = "Radziwill",
+           role = c("aut", "cre"),
+           email = "nicole.radziwill@gmail.com",
+           comment = c(ORCID = "0000-0002-4302-2117"))
+Description: The Mahalanobis-Taguchi System (MTS) creates diagnostic structures to detect abnormalities. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+Imports: 
+    ggplot2,
+    dplyr,
+    magrittr,
+    tidyr,
+    MASS,
+    qualityTools,
+    highcharter,
+    cowplot
+VignetteBuilder: knitr
