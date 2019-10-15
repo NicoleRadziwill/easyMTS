@@ -8,7 +8,7 @@
 <!-- badges: end -->
 
 The Mahalanobis-Taguchi System (MTS) helps you create a diagnostic
-system to measure abnormality. In MTS, we characterize a group of
+system to detect abnormality. In MTS, we characterize a group of
 multivariate reference observations to establish the bounds for what
 “good” means, and use that characterization to diagnose new
 observations. In addition to diagnostics, MTS can also be used for
@@ -59,6 +59,15 @@ variable) means.
 indicates the inverse of the correlation matrix. Fortunately all of
 these things are easy to calculate in R, and there’s also a function to
 generate MDs from a multivariate data frame.
+
+This package uses the **scaled Mahalanobis Distance** recommended by
+Yang & Trewn (2004):
+
+  
+![D(\\vec{x})^2 = \\frac{1}{p} { (\\vec{x}-\\vec{\\mu})^T\\:S^{-1}\\:
+(\\vec{x}-\\vec{\\mu})
+}](https://latex.codecogs.com/png.latex?D%28%5Cvec%7Bx%7D%29%5E2%20%3D%20%5Cfrac%7B1%7D%7Bp%7D%20%7B%20%28%5Cvec%7Bx%7D-%5Cvec%7B%5Cmu%7D%29%5ET%5C%3AS%5E%7B-1%7D%5C%3A%20%28%5Cvec%7Bx%7D-%5Cvec%7B%5Cmu%7D%29%20%7D
+"D(\\vec{x})^2 = \\frac{1}{p} { (\\vec{x}-\\vec{\\mu})^T\\:S^{-1}\\: (\\vec{x}-\\vec{\\mu}) }")  
 
 ## Steps in MTS Development and Validation
 
@@ -135,3 +144,27 @@ The steps to apply MTS are:
     lists the variables that should be used in the final diagnostic
     model. Optional argument “type” can be set to “pretty” for aesthetic
     formatting in Rmd reports.
+
+## Example
+
+Here is a quick example using the iris data. This only prepares and
+plots distances from a collection of good observations and a collection
+of bad observations. Each collection must have the same number of
+columns (predictors) but they can have a different number of rows
+(observations):
+
+``` r
+library(easyMTS)
+library(MASS)
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+
+good <- iris[1:50,1:4]    # Setosa are "healthy" group
+bad  <- iris[51:150,1:4]  # Virginica and versicolor are "unhealthy"
+
+mds <- computeMDs(good, bad)
+plotMDs(mds)
+```
+
+![](README_files/figure-gfm/iris-1.png)<!-- -->

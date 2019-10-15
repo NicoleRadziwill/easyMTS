@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The Mahalanobis-Taguchi System (MTS) helps you create a diagnostic system to measure abnormality. In MTS, 
+The Mahalanobis-Taguchi System (MTS) helps you create a diagnostic system to detect abnormality. In MTS, 
 we characterize a group of multivariate reference observations to establish the bounds for what "good" means, 
 and use that characterization to diagnose new observations. In addition to diagnostics, MTS can also be used for classification and prediction -- but it's not a classifier per se. MTS doesn't attempt to split
 observations into multiple groups, it just tells you whether your new observation matches the data in your 
@@ -47,6 +47,11 @@ $$D(\vec{x}) = \sqrt{ (\vec{x}-\vec{\mu})^T\:S^{-1}\: (\vec{x}-\vec{\mu}) }$$
 
 The initial term under the square root is the transposed matrix containing the differences between the x's and the 
 column (independent variable) means. $S^{-1}$ indicates the inverse of the correlation matrix. Fortunately all of these things are easy to calculate in R, and there's also a function to generate MDs from a multivariate data frame. 
+
+This package uses the **scaled Mahalanobis Distance** recommended by Yang & Trewn (2004):
+
+$$D(\vec{x})^2 = \frac{1}{p} { (\vec{x}-\vec{\mu})^T\:S^{-1}\: (\vec{x}-\vec{\mu}) }$$
+
 
 
 ## Steps in MTS Development and Validation
@@ -87,3 +92,22 @@ The steps to apply MTS are:
 * *plotGains* - Plots the output of calcGains. Negative gain indicates that the predictor does not enhance the discriminatory power of the MTS. Optional argument "type" can be set to "maineffects" for a maineffects plot across all predictors, "hc_scatter" or "hc_column". Default is ggplot barplot.
 * *recommend* - Using data frame output from calcGains, this function lists the variables that should be used in the final diagnostic model. Optional argument "type" can be set to "pretty" for aesthetic formatting in Rmd reports.
 
+
+## Example
+
+Here is a quick example using the iris data. This only prepares and plots distances from a collection of good observations and a collection of bad observations. Each collection must have the same number of columns (predictors) but they can have a different number of rows (observations):
+
+```{r iris, warning=FALSE, message=FALSE}
+library(easyMTS)
+library(MASS)
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+
+good <- iris[1:50,1:4]    # Setosa are "healthy" group
+bad  <- iris[51:150,1:4]  # Virginica and versicolor are "unhealthy"
+
+mds <- computeMDs(good, bad)
+plotMDs(mds)
+
+```
